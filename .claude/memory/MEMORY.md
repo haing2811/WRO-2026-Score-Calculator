@@ -1,1 +1,0 @@
-- [Fixed script.js corruption](fix-script-js.md) — Rewrote script.js with correct scoring data and functionality
