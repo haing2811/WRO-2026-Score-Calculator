@@ -1,0 +1,18 @@
+{
+  "name": "WRO 2026 Robomission - Score Calculator",
+  "short_name": "WRO Score",
+  "description": "Calculate scores for WRO 2026 Robomission competitions",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0F0C1F",
+  "theme_color": "#0F0C1F",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "iconrb.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

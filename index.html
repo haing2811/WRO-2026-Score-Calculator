@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WRO 2026 Score Calculator - TEST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header id="header">
+        <div class="header-content">
+            <div class="header-left">
+                <img src="iconrb.png" alt="WRO Logo" class="logo">
+            </div>
+            <div class="header-title">
+                WRO 2026 Score Calculator
+            </div>
+            <div class="header-controls">
+                <div class="control-group">
+                    <label for="team-name">Team Name:</label>
+                    <input type="text" id="team-name" placeholder="RobotRizz">
+                </div>
+                <div class="control-group">
+                    <label for="round-number">Round:</label>
+                    <input type="number" id="round-number" min="1" value="1">   
+                </div>
+                <div class="control-group">
+                    <label for="time-seconds">Time (s):</label>
+                    <input type="number" id="time-seconds" min="0" value="0">
+                </div>
+                <div class="control-group control-group-notes">
+                    <button type="button" class="btn-secondary" id="btn-open-notes">Notes</button>
+                </div>
+                <button class="btn-secondary" id="btn-reset">Reset</button>
+                <button class="btn-primary" id="btn-save">Save Run</button>
+                <button class="btn-danger btn-link" id="btn-history">History</button>
+            </div>
+        </div>
+    </header>
+
+    <div id="tabs">
+        <button class="tab-btn" data-category="elementary">Elementary — Robot Rockstars</button>
+        <button class="tab-btn" data-category="junior">Junior — Heritage Heroes</button>
+        <button class="tab-btn" data-category="senior">Senior — Mosaic Masters</button>
+    </div>
+
+    <div id="main-container">
+        <!-- Field Map Panel -->
+        <div id="canvas-container">
+            <div class="field-header">FIELD MAP — Elementary</div>
+            <div id="calibrate-toolbar">
+                <label><input type="checkbox" id="calibrate-toggle"> Calibrate Mode (drag boxes to reposition)</label>
+                <button id="btn-export-coords" class="btn-secondary" style="display:none;">Export coordinates</button>
+                <span id="calibrate-hint" style="display:none;"> This will NOT be saved!!! 
+                    Drag box = move | Drag corner handle = resize | Click box = select | Arrow keys = nudge (Shift = bigger step)</span>
+            </div>
+            <div id="field-wrapper">
+                <canvas id="field-canvas"></canvas>
+                <div id="overlay-container"></div>
+            </div>
+            <div id="calibrate-output-panel">
+                <div id="calibrate-output-header">
+                    <span>Paste this into <code>precomputeFieldOverlays()</code> for this category:</span>
+                    <div>
+                        <button id="btn-copy-coords" class="btn-secondary">Copy</button>
+                        <button id="btn-close-coords" class="btn-secondary">Close</button>
+                    </div>
+                </div>
+                <textarea id="calibrate-output" readonly></textarea>
+            </div>
+        </div>
+
+        <!-- Scoring Sidebar -->
+        <div id="sidebar"></div>
+    </div>
+
+    <!-- Live Total Bar -->
+    <div id="live-total">
+        <div class="live-total-content">
+            <span>Total Score:</span>
+            <span id="total-score">0 / 0</span>
+        </div>
+    </div>
+
+    <!-- History Modal (hidden by default) -->
+    <section id="history-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Run History</h2>
+            <table id="history-table-element">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Team</th>
+                        <th>Round</th>
+                        <th>Score</th>
+                        <th>Time (s)</th>
+                        <th>Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="history-table-body">
+                    <!-- History rows will be populated here -->
+                </tbody>
+            </table>
+            <button class="btn-secondary" id="btn-close-history">Close</button>
+        </div>
+    </section>
+
+    <!-- Notes Modal (hidden by default) -->
+    <section id="notes-modal" class="modal hidden">
+        <div class="modal-content notes-modal-content">
+            <h2>Run Notes</h2>
+            <p class="notes-modal-hint">Mistakes, errors, anything to remember for next round.</p>
+            <textarea id="run-notes" placeholder="e.g. missed cable 2, robot stalled on turn 3, forgot to reset gyro..."></textarea>
+            <button class="btn-primary" id="btn-close-notes">Done</button>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+
+    <!-- Clean up any previously-installed service worker / cache from earlier versions of this
+         app. The service worker used to cache script.js/styles.css/index.html with a hardcoded
+         cache name that never changed, so browsers that had it installed would keep serving old
+         file versions forever, even after the files were updated on disk. This removes it. -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          registrations.forEach(reg => reg.unregister());
+        });
+      }
+      if ('caches' in window) {
+        caches.keys().then(names => names.forEach(name => caches.delete(name)));
+      }
+    </script>
+</body>
+</html>
