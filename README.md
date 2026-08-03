@@ -34,7 +34,7 @@ WRO_SCORE/
 └── <Category>/                   # Official WRO rulebooks & printable game mats (PDF)
 ```
 
-## Scoring Categories (at a glance)
+## Scoring Categories 
 
 | Category   | Theme             | Max Points |
 |------------|-------------------|-----------:|
