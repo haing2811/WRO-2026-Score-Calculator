@@ -2,6 +2,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Fix: when served at /wro2026-score-calculator (no trailing slash), relative paths
+         (styles.css, script.js, GameField/...) resolve against the site root and 404.
+         This adds the slash first. Leaves file:// and URLs ending in a file name alone. -->
+    <script>
+      if (location.protocol.indexOf('http') === 0 &&
+          !location.pathname.endsWith('/') &&
+          !/\.[a-z0-9]+$/i.test(location.pathname)) {
+        location.replace(location.pathname + '/' + location.search + location.hash);
+      }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WRO 2026 Score Calculator - TEST</title>
