@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WRO 2026 Score Calculator - TEST</title>
+    <meta name="theme-color" content="#0F0C1F">
+    <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="icon.png" type="image/png">
@@ -121,18 +123,20 @@
 
     <script src="script.js"></script>
 
-    <!-- Clean up any previously-installed service worker / cache from earlier versions of this
-         app. The service worker used to cache script.js/styles.css/index.html with a hardcoded
-         cache name that never changed, so browsers that had it installed would keep serving old
-         file versions forever, even after the files were updated on disk. This removes it. -->
+    <!-- Register the offline-first service worker. This REPLACES the legacy cleanup script
+         that used to live here: that script unregistered ALL service workers and deleted ALL
+         caches on every load, which would have killed this SW immediately. Stale-cache cleanup
+         now lives in sw.js's activate handler (whitelist-based), which only removes caches from
+         older VERSION values. Relative './sw.js' gives scope '/' at the site root and scope
+         '/wro2026-score-calculator/' under the portal prefix — no Service-Worker-Allowed needed.
+         The http(s) guard keeps file:// double-click usage silent (file:// has no SW support). -->
     <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(registrations => {
-          registrations.forEach(reg => reg.unregister());
+      if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('./sw.js').catch(function (err) {
+            console.warn('Service worker registration failed:', err);
+          });
         });
-      }
-      if ('caches' in window) {
-        caches.keys().then(names => names.forEach(name => caches.delete(name)));
       }
     </script>
 </body>
